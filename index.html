@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>RefugeeReady East Africa</title>
+<meta name="theme-color" content="#1F5673">
+<meta name="description" content="Pre-submission review of refugee-response concept notes for PRM funding in Ethiopia, Kenya, and South Sudan.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RefugeeReady">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -419,15 +428,59 @@ function friendlyText(c, kind){
   if(c==="not_granted") return "This tool needs your permission to ask Claude. Reload the page, click Allow when prompted, then try again.";
   if(c==="session_expired") return "Your Claude sign-in expired. Sign in again at claude.ai, then reload this page.";
   if(c==="sampling_disabled"||c==="capability_disabled"||c==="not_declared") return "Claude isn't available for this account here. Open the link in a browser while signed in to a personal Claude account (a free account works).";
-  if(c==="rate_limited") return "You've reached your Claude usage limit for now. This is common on free Claude accounts. Wait a while (usually a few hours at most), then try again.";
+  if(c==="server_misconfigured") return "The review service isn't set up correctly (API key or model problem). If you run this site, check the Netlify environment variables and function logs.";
+  if(c==="timeout") return "The "+what+" took too long. Try again, or shorten the program description.";
+  if(c==="rate_limited") return "The review service is busy or has reached its usage limit. Wait a few minutes, then try again.";
   if(c==="prompt_too_large") return "The program description is too long. Shorten it or upload a shorter concept note, then try again.";
   if(c==="invalid_json") return "Claude's "+what+" came back incomplete. Try again; if it keeps happening, shorten the program description.";
   if(c==="refused") return "Claude declined this request. Rephrase the description and try again.";
   if(c==="empty_completion") return "Claude returned an empty "+what+". Try again with a fuller description.";
   return "The "+what+" didn't finish because of a connection or service problem. Wait a moment, then try again.";
 }
-const samplePromise = window.claude ? window.claude.use("sample") : Promise.resolve(null);
-const downloadsPromise = window.claude ? window.claude.use("downloads") : Promise.resolve(null);
+/* ---- Connection to Claude via this site's own Netlify functions ----
+   The page starts a background job, then checks every few seconds until the result is ready.
+   This avoids serverless time limits, since a full review can take close to a minute. */
+const API_BASE = "/.netlify/functions";
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+function newJobId(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx".replace(/x/g,()=>Math.floor(Math.random()*16).toString(16));
+}
+async function runJob(messages){
+  const id = newJobId();
+  let res;
+  try{
+    res = await fetch(API_BASE+"/review-background",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,messages})});
+  }catch(e){ throw {code:"network"}; }
+  if(res.status===413) throw {code:"prompt_too_large"};
+  if(res.status!==202 && !res.ok) throw {code:"network"};
+  const started = Date.now();
+  while(Date.now()-started < 6*60*1000){
+    await sleep(3000);
+    let r;
+    try{ r = await fetch(API_BASE+"/review-status?id="+encodeURIComponent(id),{cache:"no-store"}); }catch(e){ continue; }
+    if(!r.ok) continue;
+    const j = await r.json();
+    if(j.status==="done") return j.text;
+    if(j.status==="error") throw {code:j.code||"network"};
+  }
+  throw {code:"timeout"};
+}
+function parseJson(text){
+  let t=(text||"").trim().replace(/^```(?:json)?\s*/i,"").replace(/```\s*$/,"").trim();
+  try{ return JSON.parse(t); }catch(e){}
+  const a=t.indexOf("{"), b=t.lastIndexOf("}");
+  if(a>=0 && b>a){ try{ return JSON.parse(t.slice(a,b+1)); }catch(e){} }
+  throw {code:"invalid_json"};
+}
+const sampleFn = async (turns, opts) => { const text = await runJob(turns); if(opts && opts.onText) opts.onText({text}); return {text}; };
+sampleFn.json = async prompt => parseJson(await runJob([{role:"user",content:prompt}]));
+const samplePromise = Promise.resolve(sampleFn);
+const downloadsPromise = Promise.resolve({save: async ({filename,data})=>{
+  const url = URL.createObjectURL(new Blob([data],{type:"text/markdown"}));
+  const a = document.createElement("a"); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}});
 
 function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
 function tone(s){
@@ -659,6 +712,9 @@ $("f").addEventListener("submit", async ev=>{
     out.appendChild(el("p","error",msg));
   }finally{ btn.disabled=false; btn.textContent="Review program"; }
 });
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  window.addEventListener("load",()=>{ navigator.serviceWorker.register("/sw.js").catch(()=>{}); });
+}
 </script>
 </body>
 </html>
