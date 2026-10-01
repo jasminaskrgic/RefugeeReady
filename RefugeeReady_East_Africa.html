@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RefugeeReady East Africa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --ink:#1A2230; --muted:#667085; --line:#E6E9EE; --field:#F6F7F9;
+  --accent:#1F5673; --accent-ink:#FFFFFF; --soft:#F1F5F8;
+  --good:#2E7D4F; --mid:#A26A00; --bad:#B42318;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161C; --ink:#E7EAEE; --muted:#98A2B3; --line:#262D37; --field:#1A2029;
+    --accent:#8CC0DE; --accent-ink:#0F1419; --soft:#18202A; --good:#75C893; --mid:#E3B55A; --bad:#F2918A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161C; --ink:#E7EAEE; --muted:#98A2B3; --line:#262D37; --field:#1A2029;
+  --accent:#8CC0DE; --accent-ink:#0F1419; --soft:#18202A; --good:#75C893; --mid:#E3B55A; --bad:#F2918A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 1rem)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 1.5rem}
+header{padding:3.5rem 0 2rem}
+.brand{font-size:.85rem;font-weight:600;color:var(--accent);margin:0 0 .75rem}
+h1{font-size:clamp(1.75rem,4vw,2.25rem);line-height:1.2;font-weight:700;letter-spacing:-.02em;margin:0 0 .6rem}
+.lede{color:var(--muted);margin:0;max-width:58ch}
+form{padding:0 0 2.5rem;border-bottom:1px solid var(--line)}
+.field{margin-bottom:1.25rem}
+label,.lbl{display:block;font-weight:600;font-size:.88rem;margin:0 0 .4rem}
+.hint{font-weight:400;color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media (max-width:520px){.row,.row3{grid-template-columns:1fr}}
+select,input[type=text],input[type=number],textarea{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid transparent;border-radius:8px;padding:.65rem .75rem;transition:border-color .15s}
+select:hover,input:hover,textarea:hover{border-color:var(--line)}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--bg)}
+button:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{min-height:200px;resize:vertical;line-height:1.55}
+.checks{display:flex;flex-wrap:wrap;gap:.4rem}
+.checks label{display:inline-flex;align-items:center;font-weight:500;font-size:.85rem;border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;margin:0;cursor:pointer;user-select:none}
+.checks input{position:absolute;opacity:0;pointer-events:none}
+.checks label:has(input:checked){background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.checks label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+details.more{margin:0 0 1.25rem}
+details.more summary{cursor:pointer;font-weight:600;font-size:.88rem;color:var(--accent);list-style:none;display:inline-flex;align-items:center;gap:.35rem}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"+";font-weight:700;width:1rem;text-align:center}
+details.more[open] summary::before{content:"–"}
+details.more .inner{padding-top:1rem}
+.drop{position:relative;border:1px dashed var(--line);border-radius:8px;padding:1.1rem;text-align:center;font-size:.9rem;color:var(--muted);transition:border-color .15s,background .15s}
+.drop p{margin:0}
+.drop .link{color:var(--accent);font-weight:600}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop.over,.drop:hover{border-color:var(--accent);background:var(--soft)}
+.drop:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.filestatus{margin-top:.35rem !important;color:var(--ink)}
+.filestatus:empty{display:none}
+.filestatus.bad{color:var(--bad)}
+.or{display:flex;align-items:center;gap:.75rem;color:var(--muted);font-size:.8rem;margin:1rem 0 .6rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}
+button{font:inherit;font-weight:600;border-radius:8px;cursor:pointer;border:0}
+button.primary{background:var(--accent);color:var(--accent-ink);padding:.75rem 1.4rem}
+button.primary:hover{filter:brightness(1.08)}
+button.ghost{background:none;color:var(--accent);padding:.4rem 0}
+button.ghost:hover{text-decoration:underline}
+button:disabled{opacity:.55;cursor:wait}
+.fine{font-size:.8rem;color:var(--muted);margin:1.25rem 0 0}
+#out{padding:2.5rem 0 4rem}
+.status-line{color:var(--muted)}
+.error{color:var(--bad)}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:1.75rem;align-items:start;margin-bottom:1.5rem}
+@media (max-width:520px){.verdict{grid-template-columns:1fr;gap:.5rem}}
+.score{display:flex;align-items:baseline;gap:.15rem;line-height:1}
+.score .big{font-size:3.6rem;font-weight:700;letter-spacing:-.04em}
+.score .of{font-size:1rem;color:var(--muted);font-weight:500}
+.score.good .big{color:var(--good)} .score.mid .big{color:var(--mid)} .score.bad .big{color:var(--bad)}
+.verdict h2{margin:.25rem 0 .35rem;font-size:1.3rem;letter-spacing:-.01em}
+.verdict p{margin:0;color:var(--muted)}
+.verdict .tally{margin-top:.5rem;font-size:.85rem}
+.meta{font-size:.85rem;color:var(--muted);margin:0 0 1.5rem}
+.qs{border-left:2px solid var(--mid);padding:.1rem 0 .1rem 1rem;margin:0 0 1rem}
+.qs-h{margin:0;font-weight:600;font-size:.9rem}
+.qs ul{margin:.25rem 0 0;padding-left:1.1rem;color:var(--muted);font-size:.92rem}
+.sec-block{padding-top:2rem}
+h3.sec{font-size:1.02rem;font-weight:700;margin:0 0 .75rem;display:flex;gap:.6rem;align-items:baseline}
+h3.sec .n{color:var(--muted);font-weight:500;font-size:.85rem;min-width:1rem}
+.sec-block > p,.sec-block > ul,.sec-block > ol{margin-top:0}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .75rem .7rem 0;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:.8rem;padding-top:0}
+tr:last-child td{border-bottom:0}
+.chip{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;white-space:nowrap}
+.chip::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:currentColor}
+.chip.good{color:var(--good)} .chip.bad{color:var(--bad)} .chip.mid{color:var(--mid)}
+.src{color:var(--muted);font-size:.78rem;margin-top:.2rem}
+.sugg{margin-top:.3rem;font-size:.85rem;color:var(--muted)}
+ul.flags{padding-left:1.1rem;margin:0} ul.flags li{margin-bottom:.4rem}
+ol.fixes{padding-left:1.2rem;margin:0} ol.fixes li{margin-bottom:.8rem;padding-left:.2rem}
+ol.fixes .why{display:block;color:var(--muted);font-size:.9rem}
+.foot{margin-top:2.5rem;font-size:.8rem;color:var(--muted)}
+.toolbar{margin-top:.5rem}
+.chat{margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--line)}
+.chat h3{font-size:1.02rem;margin:0 0 .2rem}
+.chat > .hint{margin:0;font-size:.9rem}
+.chat .log{display:flex;flex-direction:column;gap:.6rem;margin:1rem 0}
+.chat .log:empty{display:none}
+.msg{padding:.65rem .9rem;border-radius:12px;max-width:90%;white-space:pre-wrap;font-size:.93rem}
+.msg.u{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.a{align-self:flex-start;background:var(--field)}
+.chat form{display:flex;gap:.5rem;padding:0;border:0;margin-top:1rem}
+.chat input{flex:1}
+.chat .starters{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem}
+.chat .starters button{font-size:.82rem;font-weight:500;padding:.35rem .8rem;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink)}
+.chat .starters button:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.tabs{display:flex;gap:1.5rem;margin:1.5rem 0 0;border-bottom:1px solid var(--line)}
+.tabs button{background:none;color:var(--muted);padding:.5rem 0;border-radius:0;border-bottom:2px solid transparent;margin-bottom:-1px;font-size:.92rem}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.examples{flex-basis:100%;display:flex;align-items:center;gap:.4rem .9rem;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.examples button{font-size:.85rem}
+.delta{display:inline-block;margin-left:.5rem;font-size:.85rem;font-weight:600}
+.delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.same{color:var(--muted)}
+.evidence{margin-top:.3rem;font-size:.82rem;color:var(--muted);font-style:italic;border-left:2px solid var(--line);padding-left:.5rem}
+details.method{margin:0 0 1rem;font-size:.9rem}
+details.method summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:.85rem}
+details.method .inner{padding-top:.75rem}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.history{font-size:.82rem;color:var(--muted);margin:.4rem 0 0}
+#about{padding:2rem 0 3rem}
+#about h2{font-size:1.3rem;margin:0 0 .4rem;letter-spacing:-.01em}
+#about h3{font-size:1rem;margin:2rem 0 .5rem}
+#about p,#about li{color:var(--ink)}
+#about .lead{color:var(--muted);margin:0 0 1.5rem}
+.spec{display:grid;grid-template-columns:10rem 1fr;gap:0;border-top:1px solid var(--line)}
+.spec dt,.spec dd{padding:.8rem 0;border-bottom:1px solid var(--line);margin:0}
+.spec dt{font-weight:600;font-size:.9rem;padding-right:1rem}
+@media (max-width:560px){.spec{grid-template-columns:1fr}.spec dt{border-bottom:0;padding-bottom:0}}
+#about ul{padding-left:1.1rem}
+footer{border-top:1px solid var(--line);padding:1.5rem 0 3rem;font-size:.82rem;color:var(--muted)}
+footer details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+footer dl{margin:.75rem 0 0}
+footer dt{font-weight:600;color:var(--ink);margin-top:.6rem}
+footer dd{margin:.1rem 0 0}
+@media (prefers-reduced-motion:no-preference){ .report{animation:fade .3s ease-out} @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="brand">RefugeeReady East Africa</p>
+  <h1>Review your concept note before you submit</h1>
+  <p class="lede">Get a reviewer-style check of refugee-response programs seeking U.S. State Department PRM funding in Ethiopia, Kenya, and South Sudan.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab-review" aria-selected="true" aria-controls="review">Review a program</button>
+    <button type="button" role="tab" id="tab-about" aria-selected="false" aria-controls="about">About this tool</button>
+  </div>
+</header>
+<div id="review" role="tabpanel" aria-labelledby="tab-review">
+
+<form id="f" autocomplete="off">
+  <div class="row">
+    <div class="field">
+      <label for="country">Country</label>
+      <select id="country"><option>Kenya</option><option>Ethiopia</option><option>South Sudan</option></select>
+    </div>
+    <div class="field">
+      <label for="org">Organization type</label>
+      <select id="org"><option>International NGO</option><option>Local / national NGO</option><option>Consortium</option><option>International organization</option><option>For-profit company</option></select>
+    </div>
+  </div>
+  <div class="field">
+    <span class="lbl">Sectors</span>
+    <div class="checks" id="sectors">
+      <label><input type="checkbox" value="WASH">WASH</label>
+      <label><input type="checkbox" value="Protection">Protection</label>
+      <label><input type="checkbox" value="GBV">GBV</label>
+      <label><input type="checkbox" value="Child protection">Child protection</label>
+      <label><input type="checkbox" value="Health">Health</label>
+      <label><input type="checkbox" value="MHPSS">MHPSS</label>
+      <label><input type="checkbox" value="Education">Education</label>
+      <label><input type="checkbox" value="Livelihoods">Livelihoods</label>
+      <label><input type="checkbox" value="Food security and nutrition">Food and nutrition</label>
+      <label><input type="checkbox" value="Shelter">Shelter</label>
+      <label><input type="checkbox" value="Cash and voucher assistance">Cash and vouchers</label>
+    </div>
+  </div>
+  <details class="more" id="more">
+    <summary>Budget, duration, and NOFO (optional)</summary>
+    <div class="inner">
+      <div class="row3">
+        <div class="field"><label for="budget">Budget (USD)</label><input type="number" id="budget" min="0" step="1000" placeholder="780000"></div>
+        <div class="field"><label for="months">Months</label><input type="number" id="months" min="1" max="60" placeholder="12"></div>
+        <div class="field"><label for="pct">% refugees</label><input type="number" id="pct" min="0" max="100" placeholder="85"></div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label for="nofo">NOFO</label>
+        <input type="text" id="nofo" placeholder="e.g. FY2026 PRM Africa Overseas Assistance NOFO">
+      </div>
+    </div>
+  </details>
+  <div class="field" style="margin-bottom:0">
+    <span class="lbl">Concept note</span>
+    <div class="drop" id="drop">
+      <input type="file" id="file" accept=".pdf,.docx,.txt,.md" aria-label="Upload a concept note">
+      <p>Drop a PDF, Word, or text file, or <span class="link">browse</span></p>
+      <p class="filestatus" id="filestatus" aria-live="polite"></p>
+    </div>
+    <div class="or">or paste text</div>
+    <textarea id="text" aria-label="Concept note text" placeholder="Location, target population, sectors, objectives, activities, indicators, budget, and duration"></textarea>
+  </div>
+  <div class="actions">
+    <button type="submit" class="primary" id="go">Review program</button>
+    <div class="examples"><span>Try an example:</span>
+      <button type="button" class="ghost" data-ex="weak">Weak (Kenya WASH)</button>
+      <button type="button" class="ghost" data-ex="mixed">Mixed (Ethiopia education)</button>
+      <button type="button" class="ghost" data-ex="strong">Strong (South Sudan protection)</button>
+    </div>
+  </div>
+</form>
+
+<section id="out" aria-live="polite" hidden></section>
+</div>
+
+<div id="about" role="tabpanel" aria-labelledby="tab-about" hidden>
+  <h2>About RefugeeReady East Africa</h2>
+  <p class="lead">An AI-assisted pre-submission reviewer that helps NGOs check refugee-response programs against U.S. State Department PRM requirements before they apply.</p>
+  <dl class="spec">
+    <dt>Users</dt><dd>Program managers, proposal writers, and M&amp;E staff at local and international NGOs designing refugee-response programs in Ethiopia, Kenya, and South Sudan, especially smaller local organizations without dedicated grants teams.</dd>
+    <dt>Problem</dt><dd>PRM requirements are spread across long general guidelines, region-specific NOFOs, and technical standards. Proposals are often weakened by avoidable gaps: missing required indicators, output-only objectives, too few refugees in the target population, or weak protection and coordination plans. Many local NGOs lack the capacity for a rigorous internal review before the deadline.</dd>
+    <dt>Ground truth</dt><dd>PRM General NGO Guidelines for Overseas Assistance (FY2024), PRM Africa NOFO requirements, the Sphere Handbook (2018) minimum standards, and UNHCR country context for Kenya, Ethiopia, and South Sudan.</dd>
+    <dt>Input</dt><dd>A concept note or program description (upload or paste), plus country, organization type, sectors, and optional budget, duration, refugee share, and NOFO.</dd>
+    <dt>Output</dt><dd>A transparent readiness score, verdict, and nine-part review (eligibility, scorecard, indicators, Sphere standards, budget, risks, country fit, red flags, top 3 fixes), with evidence quoted from the concept note and a source cited for every judgment. Users can ask follow-up questions, re-review after edits to track improvement, and download the report.</dd>
+  </dl>
+
+  <h3>How the score works</h3>
+  <p>The score is calculated by the tool from the reviewer's ratings, not guessed by the AI, so every point can be traced. Each scorecard criterion is weighted (below) and rated Strong (100%), Adequate (65%), Weak (25%), or Cannot assess (0%). Eligibility then acts as a gate: any failed eligibility requirement caps the score at 45, and each unclear requirement subtracts 3 points. Scores of 80 and above are "Ready to submit," 50–79 "Needs revision," and below 50 "Major revision needed."</p>
+  <div class="tablewrap"><table id="weights"><thead><tr><th>Criterion</th><th>Weight</th></tr></thead><tbody></tbody></table></div>
+
+  <h3>Safeguards</h3>
+  <ul>
+    <li><b>Grounded:</b> the AI may only use the built-in source summaries and must say when something isn't covered, rather than inventing requirements, ceilings, or indicator codes.</li>
+    <li><b>Traceable:</b> every judgment cites its source document and quotes the evidence from the concept note it relied on.</li>
+    <li><b>Explainable scoring:</b> the readiness score is computed with a published formula, not produced by the model.</li>
+    <li><b>Privacy:</b> files are read in the browser; users are warned not to include personal data about refugees.</li>
+    <li><b>Human in the loop:</b> the tool supports, not replaces, the organization's judgment and PRM's official review.</li>
+  </ul>
+
+  <h3>Limitations</h3>
+  <ul>
+    <li>Sources are summarized, not the full documents, and PRM priorities and NOFO terms change from year to year.</li>
+    <li>AI reviewers can misread documents; the evidence quotes let users check each judgment.</li>
+    <li>It does not check budget arithmetic in detail, organizational registration, or SAM.gov status.</li>
+  </ul>
+
+  <p class="fine">Built for the "Becoming a Policy Conductor" Development Lab, O'Neill School of Public and Environmental Affairs, Indiana University.</p>
+</div>
+
+<footer>
+  <details>
+    <summary>What this tool checks against</summary>
+    <dl>
+      <dt>PRM General NGO Guidelines (FY2024)</dt><dd>Eligibility, consortium rules, sector and outcome indicators, cash and voucher indicators, scorecard, marking.</dd>
+      <dt>PRM Africa NOFO</dt><dd>At least 50% refugees or populations of concern, coordination with UNHCR, NOFO-specific limits.</dd>
+      <dt>Sphere Handbook (2018)</dt><dd>WASH, food, shelter, and health minimum standards; Core Humanitarian Standard.</dd>
+      <dt>UNHCR country context</dt><dd>Refugee settings, policies, and coordination bodies in Kenya, Ethiopia, and South Sudan.</dd>
+    </dl>
+  </details>
+  <p>Checks use summaries of these sources, not the full documents. This is not an official PRM decision; confirm requirements against the current NOFO. Don't include personal information about refugees.</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+(function(){
+  const MAX = 60000;
+  const status = document.getElementById("filestatus");
+  const drop = document.getElementById("drop");
+  const input = document.getElementById("file");
+  const setStatus = (msg, bad) => { status.textContent = msg; status.className = "filestatus" + (bad ? " bad" : ""); };
+  async function pdfText(buf){
+    if(!window.pdfjsLib) throw new Error("no pdf");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const doc = await pdfjsLib.getDocument({data: buf}).promise;
+    const out = [];
+    for(let i=1;i<=doc.numPages;i++){ const c = await (await doc.getPage(i)).getTextContent(); out.push(c.items.map(it => it.str).join(" ")); }
+    return out.join("\n\n");
+  }
+  async function docxText(buf){ if(!window.mammoth) throw new Error("no docx"); return (await mammoth.extractRawText({arrayBuffer: buf})).value; }
+  async function handle(file){
+    if(!file) return;
+    const name = file.name.toLowerCase();
+    setStatus("Reading " + file.name + "…");
+    try{
+      let text;
+      if(name.endsWith(".pdf")) text = await pdfText(await file.arrayBuffer());
+      else if(name.endsWith(".docx")) text = await docxText(await file.arrayBuffer());
+      else if(name.endsWith(".txt") || name.endsWith(".md")) text = await file.text();
+      else { setStatus("That file type isn't supported. Upload a PDF, .docx, or .txt file. For an older .doc file, save it as .docx first.", true); return; }
+      text = (text||"").replace(/[ \t]+\n/g,"\n").replace(/\n{3,}/g,"\n\n").trim();
+      if(text.length < 40){ setStatus("No readable text found in " + file.name + ". If it's a scanned PDF, paste the text into the box below instead.", true); return; }
+      let note = "Loaded " + file.name + ". Check the text below, fill in any details above, then click Review program.";
+      if(text.length > MAX){ text = text.slice(0, MAX); note = "Loaded " + file.name + ". It was long, so only the first part was kept."; }
+      document.getElementById("text").value = text;
+      setStatus(note);
+    }catch(e){ setStatus("Couldn't read " + file.name + ". Try another format, or paste the text below.", true); }
+    finally{ input.value = ""; }
+  }
+  input.addEventListener("change", () => handle(input.files[0]));
+  ["dragenter","dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave","drop"].forEach(t => drop.addEventListener(t, () => drop.classList.remove("over")));
+  drop.addEventListener("drop", e => { e.preventDefault(); handle(e.dataTransfer.files[0]); });
+})();
+</script>
+<script>
+const GROUND_TRUTH = `
+PRM GENERAL NGO GUIDELINES FOR OVERSEAS ASSISTANCE (FY2024 edition, summarized):
+- PRM does not fund for-profit organizations. Applicants must be non-profit NGOs or international organizations.
+- Consortia must include at least three NGOs.
+- Proposals must focus on the sectors/modalities specified in the NOFO and include the corresponding PRM standardized indicators (Appendix D) for every sector/sub-sector with proposed activities or budget.
+- Three indicators are required for all programs regardless of sector, unless the NOFO or PRM staff say otherwise.
+- Programs using cash and/or voucher assistance must use the relevant CVA indicators.
+- Each objective should have at least one outcome or impact indicator; focus on outcomes rather than outputs. Indicators should be specific, measurable, with baselines and targets, and disaggregated (e.g. by sex and age).
+- PRM conducts competitive reviews against the NOFO's evaluation criteria; a sample scorecard is in Appendix F.
+- Recipients must publicly acknowledge PRM funding (marking requirements).
+- PRM-funded education in refugee reintegration settings should have an MoU with local or national Ministry of Education officials.
+- Award duration, funding floors/ceilings, page limits, and priorities are set by each NOFO.
+
+PRM AFRICA NOFO (past concept-note NOFO, summarized):
+- Programs should target a population of at least 50 percent refugees, IDPs, or other populations of concern (confirm threshold in current NOFO).
+- Applicants should coordinate with UNHCR and relevant sector working groups.
+
+SPHERE HANDBOOK (2018), selected minimum standards and indicators:
+- Water: at least 15 litres per person per day for drinking and domestic hygiene; water point no more than 500 m from households; queuing time no more than 30 minutes; no detectable E. coli per 100 ml at point of delivery; free residual chlorine 0.2–0.5 mg/l at point of delivery where chlorinated.
+- Sanitation: no more than 20 people per toilet (communal/shared); toilets no more than 50 m from dwellings; toilets sex-segregated where shared, lockable from inside, lit, and accessible to persons with disabilities.
+- Hygiene: access to soap and menstrual hygiene materials; handwashing facilities near toilets.
+- Food security: planning figure of 2,100 kcal per person per day.
+- Shelter: at least 3.5 m² covered living space per person (excluding cooking/bathing in most contexts).
+- Core Humanitarian Standard: accountability to affected people, participation, safe and accessible feedback and complaints mechanisms.
+- Protection principles apply across all sectors: safety and dignity, meaningful access, accountability, participation.
+
+CROSS-CUTTING EXPECTATIONS: protection mainstreaming, GBV risk mitigation, protection from sexual exploitation and abuse (PSEA), disability inclusion, accountability to affected populations, data protection, do no harm, conflict sensitivity including refugee–host relations.
+
+COUNTRY CONTEXT (general, verify with current UNHCR data):
+- Kenya: refugee populations in Kakuma camp and Kalobeyei settlement (Turkana County) and Dadaab (Garissa County); the Refugees Act 2021 and the Shirika Plan aim to shift camps toward integrated settlements; coordination with UNHCR, Kenya's Department of Refugee Services, and county governments.
+- Ethiopia: one of Africa's largest refugee-hosting countries (South Sudanese, Somali, Eritrean, Sudanese refugees) in regions such as Gambella, Somali, Afar, Tigray, and Benishangul-Gumuz; the 2019 Refugee Proclamation expands refugee rights; coordination with UNHCR and the Refugees and Returnees Service (RRS).
+- South Sudan: hosts refugees (largely from Sudan) while facing large internal displacement and returnee flows; insecurity, flooding, and access constraints; coordination with UNHCR, OCHA-led clusters, and government counterparts.
+`;
+
+const SCORECARD = ["Alignment with NOFO and PRM priorities","Needs assessment and program design","Objectives and indicators","Monitoring and evaluation plan","Budget and cost-effectiveness","Organizational capacity and past performance","Coordination with UNHCR and partners","Protection mainstreaming and accountability to affected populations","Sustainability and exit strategy"];
+
+const EXAMPLES = {
+ weak:{country:"Kenya",org:"Local / national NGO",sectors:["WASH"],budget:900000,months:12,pct:40,nofo:"",
+  text:"We are a local NGO proposing a 12-month WASH program in Kakuma, Kenya, budget $900,000. We will build 20 latrines and run hygiene promotion for 15,000 people, about 40% refugees and 60% host community. Our objective is to improve health outcomes. We will measure success by the number of latrines built."},
+ mixed:{country:"Ethiopia",org:"International NGO",sectors:["Education"],budget:1200000,months:12,pct:75,nofo:"FY2026 PRM Africa Overseas Assistance NOFO",
+  text:"Learning Forward Gambella (sample). Applicant: Bright Futures International, a U.S. non-profit working in Gambella Region since 2017.\n\nLocation: Nguenyyiel and Kule refugee camps and two nearby host kebeles, Gambella Region, Ethiopia. Target: 9,000 primary-school children (75% South Sudanese refugees, 25% host community). Duration: 12 months. Budget: $1.2 million.\n\nProblem: Classrooms are overcrowded, many children are out of school, and learning outcomes in early grades are low. Girls drop out more often than boys.\n\nObjective 1: Increase access to primary education. Indicators: number of classrooms built (30); number of children enrolled (9,000).\nObjective 2: Improve learning outcomes. Indicator: % of Grade 3 learners reading at grade level (baseline 18%, target 35%), measured by an early grade reading assessment.\nObjective 3: Support teachers. Indicator: number of teachers trained (150).\n\nActivities: construct 30 classrooms, distribute learning materials, train refugee and host teachers in literacy instruction, run a back-to-school campaign.\n\nWe will coordinate with UNHCR and the Education Working Group. We will report quarterly. Budget: construction $600,000, materials $250,000, training $150,000, staff $150,000, indirect $50,000."},
+ strong:{country:"South Sudan",org:"International NGO",sectors:["Protection","GBV","MHPSS"],budget:850000,months:12,pct:90,nofo:"FY2026 PRM Africa Overseas Assistance NOFO",
+  text:"Safe Futures Maban (sample). Applicant: Common Ground Relief, a U.S. 501(c)(3) non-profit operating in Upper Nile State since 2012, with prior PRM, UNHCR, and ECHO awards and no significant audit findings.\n\nLocation: Doro and Yusuf Batil refugee camps and adjacent host communities, Maban County, Upper Nile State, South Sudan. Target: 24,000 people (90% Sudanese refugees, 10% host community). Duration: 12 months. Requested PRM funding: $850,000.\n\nNeeds assessment: A June 2026 protection assessment (380 household surveys, 22 focus groups disaggregated by sex, age, and disability) found women and girls face GBV risk at water points and firewood collection routes, limited access to confidential case management, and high psychosocial distress among new arrivals.\n\nGoal: Refugees and host community members in Maban, especially women and girls, are safer from GBV and have access to survivor-centred services.\n\nObjective 1: Improve access to quality GBV case management. Outcome indicator: % of GBV survivors receiving case management who report satisfaction with services (target 80%). Outputs: survivors receiving case management (900); women and girls safe spaces operating (4).\nObjective 2: Reduce GBV risk in the community. Outcome indicator: % of women and girls reporting feeling safe moving around the camp (baseline 32%, target 60%). Outputs: safety audits (16); community members trained in GBV prevention (400).\nObjective 3: Improve psychosocial wellbeing. Outcome indicator: % of MHPSS participants with improved wellbeing scores (target 70%). Outputs: individuals receiving focused psychosocial support (1,500).\nAll indicators will use applicable PRM standardized Protection indicators and required indicators, disaggregated by sex, age, disability, and refugee/host status.\n\nProtection and accountability: survivor-centred approach; case data in a secure, access-restricted system with no identifiable data shared; PSEA code of conduct and training for all staff; community feedback hotline and help desks in Arabic and local languages; accessible safe spaces for persons with disabilities.\n\nCoordination: member of the Maban Protection Working Group and GBV Sub-Cluster; referral pathways agreed with UNHCR, health partners, and the Commission for Refugee Affairs. Risks: insecurity and flooding may restrict access; mitigation includes pre-positioned supplies, community-based volunteers, and remote case supervision.\n\nSustainability: training of refugee community volunteers and local women's groups to lead prevention activities after the grant. Budget: personnel $380,000; safe spaces and supplies $170,000; case management and MHPSS $150,000; trainings and audits $60,000; M&E $40,000; indirect $50,000. PRM funding will be acknowledged per marking requirements."}
+};
+const WEIGHTS = [15,15,15,10,10,10,10,10,5];
+
+const $ = id => document.getElementById(id);
+const sectorsSelected = () => [...document.querySelectorAll("#sectors input:checked")].map(i=>i.value);
+let lastReport = null, lastProgram = null, chatTurns = [];
+
+document.querySelectorAll("[data-ex]").forEach(btn=>btn.onclick=()=>{
+  const x=EXAMPLES[btn.dataset.ex];
+  $("country").value=x.country; $("org").value=x.org; $("nofo").value=x.nofo;
+  document.querySelectorAll("#sectors input").forEach(i=>i.checked=x.sectors.includes(i.value));
+  $("budget").value=x.budget; $("months").value=x.months; $("pct").value=x.pct; $("more").open=true;
+  $("text").value=x.text; $("text").focus();
+});
+function showTab(which){
+  const rev=which==="review";
+  $("review").hidden=!rev; $("about").hidden=rev;
+  $("tab-review").setAttribute("aria-selected",rev); $("tab-about").setAttribute("aria-selected",!rev);
+}
+$("tab-review").onclick=()=>showTab("review"); $("tab-about").onclick=()=>showTab("about");
+(function(){ const tb=document.querySelector("#weights tbody"); SCORECARD.forEach((c,i)=>{const tr=el("tr"); tr.appendChild(el("td",null,c)); tr.appendChild(el("td","num",WEIGHTS[i]+"%")); tb.appendChild(tr);}); })();
+
+const RATING_PCT={strong:1,adequate:.65,weak:.25};
+function computeScore(r){
+  const rows=SCORECARD.map((c,i)=>{
+    const item=(r.scorecard||[])[i]||{}; const key=(item.rating||"").toLowerCase().split(" ")[0];
+    const pct=RATING_PCT[key]||0; return {criterion:c, rating:item.rating||"Cannot assess", weight:WEIGHTS[i], points:Math.round(pct*WEIGHTS[i]*10)/10};
+  });
+  let raw=rows.reduce((a,x)=>a+x.points,0);
+  const el_=r.eligibility||[];
+  const fails=el_.filter(e=>/^fail/i.test(e.status||"")).length, unclear=el_.filter(e=>/^unclear/i.test(e.status||"")).length;
+  let score=raw - unclear*3; const notes=[];
+  if(unclear) notes.push(`−${unclear*3} for ${unclear} unclear eligibility item${unclear>1?"s":""}`);
+  if(fails){ if(score>45) notes.push(`capped at 45 because ${fails} eligibility requirement${fails>1?"s":""} failed`); score=Math.min(score,45); }
+  score=Math.max(0,Math.round(score));
+  const verdict= score>=80?"Ready to submit":score>=50?"Needs revision":"Major revision needed";
+  return {rows, raw:Math.round(raw), score, verdict, notes};
+}
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem("rr-history")||"[]"); }catch(e){ return []; } }
+function saveHistory(h){ try{ localStorage.setItem("rr-history", JSON.stringify(h.slice(-10))); }catch(e){} }
+
+function friendlyError(err, kind){
+  const c = err && err.code;
+  return friendlyText(c, kind) + " (Error code: " + (c||"unknown") + ")";
+}
+function friendlyText(c, kind){
+  const what = kind==="chat" ? "answer" : "review";
+  if(c==="not_granted") return "This tool needs your permission to ask Claude. Reload the page, click Allow when prompted, then try again.";
+  if(c==="session_expired") return "Your Claude sign-in expired. Sign in again at claude.ai, then reload this page.";
+  if(c==="sampling_disabled"||c==="capability_disabled"||c==="not_declared") return "Claude isn't available for this account here. Open the link in a browser while signed in to a personal Claude account (a free account works).";
+  if(c==="rate_limited") return "You've reached your Claude usage limit for now. This is common on free Claude accounts. Wait a while (usually a few hours at most), then try again.";
+  if(c==="prompt_too_large") return "The program description is too long. Shorten it or upload a shorter concept note, then try again.";
+  if(c==="invalid_json") return "Claude's "+what+" came back incomplete. Try again; if it keeps happening, shorten the program description.";
+  if(c==="refused") return "Claude declined this request. Rephrase the description and try again.";
+  if(c==="empty_completion") return "Claude returned an empty "+what+". Try again with a fuller description.";
+  return "The "+what+" didn't finish because of a connection or service problem. Wait a moment, then try again.";
+}
+const samplePromise = window.claude ? window.claude.use("sample") : Promise.resolve(null);
+const downloadsPromise = window.claude ? window.claude.use("downloads") : Promise.resolve(null);
+
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+function tone(s){
+  s=(s||"").toLowerCase();
+  if(/^(pass|strong|meets|outcome|addressed)/.test(s)) return "good";
+  if(/^(fail|weak|below|missing|not addressed)/.test(s)) return "bad";
+  return "mid";
+}
+function chip(s){ return el("span","chip "+tone(s), s||"—"); }
+
+function programBlock(){
+  return `Country: ${$("country").value}
+Organization type: ${$("org").value}
+Sectors selected: ${sectorsSelected().join(", ") || "Not selected (infer from text)"}
+Budget (USD): ${$("budget").value || "Not given"}
+Duration (months): ${$("months").value || "Not given"}
+Percent refugees/populations of concern: ${$("pct").value ? $("pct").value+"%" : "Not given"}
+NOFO: ${$("nofo").value || "Not specified (review against General NGO Guidelines)"}
+Program design:
+"""${$("text").value.trim()}"""`;
+}
+
+function buildPrompt(){
+  return `You are RefugeeReady East Africa, a pre-submission review assistant acting like an experienced U.S. State Department PRM proposal reviewer: rigorous, specific, honest, and constructive.
+
+Review the program below ONLY against these source summaries. Cite the source for every judgment ("PRM General NGO Guidelines", "PRM Africa NOFO", "Sphere Handbook", "UNHCR country context"). If the sources do not cover something, write "Not covered by source documents; verify with the current NOFO." Never invent requirements, dollar ceilings, deadlines, or official indicator codes. Where information is missing, use "Unclear", "Not stated", or "Cannot assess", and list up to 3 questions. If form fields and program text conflict, flag it.
+
+SOURCES:
+${GROUND_TRUTH}
+
+PROGRAM:
+${programBlock()}
+
+Return ONLY valid JSON (no markdown fences) in exactly this shape. Keep every text field concise (one or two sentences).
+{
+ "title": "short program title",
+ "sectors": "comma-separated sectors",
+ "summary": "2 sentences",
+ "missingInfo": ["up to 3 questions"],
+ "eligibility": [{"requirement":"","status":"Pass|Fail|Unclear","note":"","evidence":"short exact quote (max 20 words) from the program text, or 'Not found in the concept note'","source":""}],
+ "scorecard": [{"criterion":"","rating":"Strong|Adequate|Weak|Cannot assess","reason":"","evidence":"short exact quote (max 20 words) from the program text, or 'Not found in the concept note'","source":""}],
+ "indicators": [{"indicator":"as written or 'None stated'","type":"Outcome|Output|Unclear","issues":"","suggestion":"improved wording"}],
+ "sphere": [{"standard":"","program":"what the program states","status":"Meets|Below|Not stated"}],
+ "budget": {"assessment":"2 sentences on cost reasonableness and structure","flags":["short items"]},
+ "risks": [{"risk":"","status":"Addressed|Partly addressed|Not addressed","note":""}],
+ "countryFit": "3-5 sentences",
+ "redFlags": ["most serious first"],
+ "fixes": [{"fix":"concrete action","why":"impact on score"}]
+}
+Rules for sections:
+- eligibility: check at least non-profit applicant; share of refugees/populations of concern; sectors match NOFO; PRM standardized indicators per sector; outcome indicator per objective; duration and budget within NOFO limits; marking/acknowledgment.
+- scorecard: use these criteria in order: ${SCORECARD.join("; ")}.
+- indicators: list every indicator in the program (max 8); if none, one row "None stated".
+- sphere: only standards relevant to the program's sectors (max 6); empty array if none apply.
+- risks: cover protection/GBV risk, PSEA, disability inclusion, refugee–host tensions, data protection, and one context-specific operational risk.
+- fixes: exactly 3, ordered by impact.
+- evidence: quote the program text exactly; never paraphrase inside evidence and never quote the sources.
+- ratings: be calibrated like a real competitive reviewer. "Strong" means clearly meets the standard with specifics; do not inflate.`;
+}
+
+function table(headers, rows){
+  const w=el("div","tablewrap"), t=el("table"), th=el("thead"), tr=el("tr");
+  headers.forEach(h=>tr.appendChild(el("th",null,h))); th.appendChild(tr); t.appendChild(th);
+  const tb=el("tbody"); rows.forEach(r=>tb.appendChild(r)); t.appendChild(tb); w.appendChild(t); return w;
+}
+function td(text, sub, subCls){ const c=el("td",null,text); if(sub) c.appendChild(el("div",subCls||"src",sub)); return c; }
+function tdChip(s){ const c=el("td"); c.appendChild(chip(s)); return c; }
+
+function render(r){
+  const out=$("out"); out.textContent="";
+  const wrap=el("div","report");
+
+  const v=el("div","verdict");
+  const calc=computeScore(r); const sc=calc.score; r.score=sc; r.verdict=calc.verdict; r._calc=calc;
+  const ring=el("div","score "+(sc>=80?"good":sc>=50?"mid":"bad"));
+  ring.appendChild(el("span","big",String(sc))); ring.appendChild(el("span","of","/100"));
+  const vt=el("div"); vt.appendChild(el("h2",null,r.verdict||"Review complete")); vt.appendChild(el("p",null,r.summary||""));
+  const el_ = r.eligibility||[]; const counts={Pass:0,Fail:0,Unclear:0}; el_.forEach(e=>{ const k=(e.status||"").split(" ")[0]; if(counts[k]!=null) counts[k]++; });
+  const tally=el("p","tally");
+  tally.textContent = "Eligibility: " + [counts.Pass+" pass", counts.Fail+" fail", counts.Unclear+" unclear"].join(", ");
+  vt.appendChild(tally);
+  const hist=loadHistory(); const prev=hist.length?hist[hist.length-1]:null;
+  if(prev && prev.title===r.title){
+    const d=sc-prev.score; const dEl=el("span","delta "+(d>0?"up":d<0?"down":"same"), d>0?`▲ ${d} since last review`:d<0?`▼ ${-d} since last review`:"No change since last review");
+    vt.querySelector("h2").appendChild(dEl);
+    const runs=hist.filter(h=>h.title===r.title).map(h=>h.score).concat(sc);
+    if(runs.length>2) vt.appendChild(el("p","history","Review history: "+runs.join(" → ")));
+  }
+  hist.push({title:r.title,score:sc}); saveHistory(hist);
+  v.appendChild(ring); v.appendChild(vt); wrap.appendChild(v);
+
+  wrap.appendChild(el("p","meta",[r.title, $("country").value, r.sectors].filter(Boolean).join("  ·  ")));
+  const md=el("details","method"); md.appendChild(el("summary",null,"How this score was calculated"));
+  const mi=el("div","inner");
+  mi.appendChild(table(["Criterion","Rating","Points"], calc.rows.map(x=>{const tr=el("tr"); tr.appendChild(td(x.criterion)); tr.appendChild(tdChip(x.rating)); const c=el("td","num"); c.textContent=x.points+" / "+x.weight; const bar=el("div","bar"); const i=el("i"); i.style.width=(x.points/x.weight*100)+"%"; bar.appendChild(i); c.appendChild(bar); tr.appendChild(c); return tr;})));
+  mi.appendChild(el("p","fine",`Scorecard total: ${calc.raw}/100${calc.notes.length?"; "+calc.notes.join("; "):""}. Final score: ${sc}/100. Strong = 100%, Adequate = 65%, Weak = 25%, Cannot assess = 0% of each weight.`));
+  md.appendChild(mi); wrap.appendChild(md);
+
+  if(r.missingInfo && r.missingInfo.length){
+    const q=el("div","qs"); q.appendChild(el("p","qs-h","To sharpen this review, add:"));
+    const ul=el("ul"); r.missingInfo.forEach(s=>ul.appendChild(el("li",null,s))); q.appendChild(ul); wrap.appendChild(q);
+  }
+  const host = wrap; let card = null;
+  const sec=(n,t)=>{card=el("section","sec-block"); card.id="s"+n; const h=el("h3","sec"); h.appendChild(el("span","n",n)); h.appendChild(document.createTextNode(t)); card.appendChild(h); host.appendChild(card);};
+  const add = node => (card||host).appendChild(node);
+
+  sec("1","Eligibility check");
+  add(table(["Requirement","Status","Why"], el_.map(e=>{const tr=el("tr"); tr.appendChild(td(e.requirement)); tr.appendChild(tdChip(e.status)); const c=td(e.note,e.source); if(e.evidence) c.insertBefore(el("div","evidence","“"+e.evidence.replace(/^["“]|["”]$/g,"")+"”"), c.lastChild); tr.appendChild(c); return tr;})));
+
+  sec("2","Scorecard review");
+  add(table(["Criterion","Rating","Reason"], (r.scorecard||[]).map(s=>{const tr=el("tr"); tr.appendChild(td(s.criterion)); tr.appendChild(tdChip(s.rating)); const c=td(s.reason,s.source); if(s.evidence) c.insertBefore(el("div","evidence","“"+s.evidence.replace(/^["“]|["”]$/g,"")+"”"), c.lastChild); tr.appendChild(c); return tr;})));
+
+  sec("3","Indicator review");
+  add(table(["Indicator","Type","Issues and suggested wording"], (r.indicators||[]).map(i=>{const tr=el("tr"); tr.appendChild(td(i.indicator)); tr.appendChild(tdChip(i.type)); const c=td(i.issues); if(i.suggestion){ c.appendChild(el("div","sugg","Try: "+i.suggestion)); } tr.appendChild(c); return tr;})));
+
+  sec("4","Sphere standards check");
+  if(r.sphere && r.sphere.length){
+    add(table(["Standard","Program","Status"], r.sphere.map(s=>{const tr=el("tr"); tr.appendChild(td(s.standard)); tr.appendChild(td(s.program)); tr.appendChild(tdChip(s.status)); return tr;})));
+  } else add(el("p",null,"No Sphere quantitative standards apply to the sectors in this program."));
+
+  sec("5","Budget review");
+  add(el("p",null,(r.budget&&r.budget.assessment)||"Cannot assess."));
+  if(r.budget && r.budget.flags && r.budget.flags.length){ const ul=el("ul","flags"); r.budget.flags.forEach(f=>ul.appendChild(el("li",null,f))); add(ul); }
+
+  sec("6","Risks and do no harm");
+  add(table(["Risk","Status","Note"], (r.risks||[]).map(x=>{const tr=el("tr"); tr.appendChild(td(x.risk)); tr.appendChild(tdChip(x.status)); tr.appendChild(td(x.note)); return tr;})));
+
+  sec("7","Country fit");
+  add(el("p",null,r.countryFit||""));
+
+  sec("8","Gaps and red flags");
+  const ul=el("ul","flags"); (r.redFlags||[]).forEach(f=>ul.appendChild(el("li",null,f))); add(ul);
+
+  sec("9","Top 3 fixes before submission");
+  const ol=el("ol","fixes"); (r.fixes||[]).forEach(x=>{const li=el("li"); li.appendChild(el("strong",null,x.fix)); li.appendChild(el("span","why",x.why)); ol.appendChild(li);}); add(ol);
+
+  wrap.appendChild(el("p","foot","This is a pre-submission review, not an official PRM decision. Confirm all requirements against the current NOFO."));
+
+  const bar=el("div","toolbar");
+  const dlBtn=el("button","ghost","Download report"); dlBtn.type="button"; dlBtn.hidden=true; dlBtn.onclick=downloadReport; bar.appendChild(dlBtn);
+  wrap.appendChild(bar);
+  downloadsPromise.then(d=>{ if(d) dlBtn.hidden=false; });
+
+  const chat=el("div","chat");
+  chat.appendChild(el("h3",null,"Ask about this review"));
+  chat.appendChild(el("p","hint","Ask for rewrites, explanations, or how to fix a specific issue."));
+  const log=el("div","log"); log.id="log"; chat.appendChild(log);
+  const cf=el("form"); const ci=el("input"); ci.type="text"; ci.id="ci"; ci.placeholder="e.g. Rewrite my objectives with outcome indicators"; ci.setAttribute("aria-label","Follow-up question");
+  const cb=el("button","primary","Ask"); cb.type="submit"; cb.id="cb"; cf.appendChild(ci); cf.appendChild(cb); chat.appendChild(cf);
+  const st=el("div","starters");
+  ["What would raise my score the most?","Rewrite my objectives with outcome indicators","Draft an improved logframe table","Suggest a protection mainstreaming paragraph","Explain the biggest eligibility risk"].forEach(s=>{const b=el("button","ghost",s); b.type="button"; b.onclick=()=>ask(s); st.appendChild(b);});
+  chat.appendChild(st);
+  cf.addEventListener("submit",e=>{e.preventDefault(); const q=ci.value.trim(); if(q){ ci.value=""; ask(q);} });
+  wrap.appendChild(chat);
+
+  out.appendChild(wrap);
+}
+
+async function ask(q){
+  const sample = await samplePromise; if(!sample || !lastReport) return;
+  const log=$("log"), cb=$("cb");
+  log.appendChild(el("div","msg u",q));
+  const a=el("div","msg a","Thinking…"); log.appendChild(a);
+  if(chatTurns.length===0){
+    chatTurns.push({role:"user",content:`You are RefugeeReady East Africa, a PRM pre-submission review assistant. Answer follow-up questions about the review below. Use only these sources; cite them; never invent requirements or official indicator codes; say when something needs verifying against the current NOFO. Keep answers practical and under 250 words unless asked for a rewrite. Use plain text, no markdown headers.
+
+SOURCES:
+${GROUND_TRUTH}
+
+PROGRAM:
+${lastProgram}
+
+REVIEW (JSON):
+${JSON.stringify(lastReport)}
+
+QUESTION: ${q}`});
+  } else chatTurns.push({role:"user",content:q});
+  cb.disabled=true;
+  try{
+    const res = await sample(chatTurns, {cache:false, onText:({text})=>{ a.textContent=text; }});
+    a.textContent=res.text; chatTurns.push({role:"assistant",content:res.text});
+  }catch(err){
+    chatTurns.pop();
+    a.textContent = friendlyError(err,"chat");
+    a.classList.add("error");
+  }finally{ cb.disabled=false; }
+}
+
+function toMarkdown(r){
+  const L=[]; const line=s=>L.push(s);
+  line(`# RefugeeReady East Africa review: ${r.title||"Program"}`);
+  line(`Country: ${$("country").value}  \nSectors: ${r.sectors||""}  \nVerdict: ${r.verdict} (${r.score}/100)\n`);
+  if(r._calc){ line("### Score breakdown"); r._calc.rows.forEach(x=>line(`- ${x.criterion}: ${x.rating} (${x.points}/${x.weight})`)); if(r._calc.notes.length) line(`- Adjustments: ${r._calc.notes.join("; ")}`); line(""); }
+  line(r.summary||""); line("");
+  line("## 1. Eligibility check"); (r.eligibility||[]).forEach(e=>line(`- **${e.requirement}**: ${e.status}. ${e.note}${e.evidence?` Evidence: "${e.evidence}"`:""} (${e.source})`));
+  line("\n## 2. Scorecard review"); (r.scorecard||[]).forEach(s=>line(`- **${s.criterion}**: ${s.rating}. ${s.reason}${s.evidence?` Evidence: "${s.evidence}"`:""} (${s.source})`));
+  line("\n## 3. Indicator review"); (r.indicators||[]).forEach(i=>line(`- **${i.indicator}** (${i.type}): ${i.issues}${i.suggestion?" Try: "+i.suggestion:""}`));
+  line("\n## 4. Sphere standards check"); (r.sphere||[]).forEach(s=>line(`- **${s.standard}**: ${s.status}. ${s.program}`));
+  line("\n## 5. Budget review"); line((r.budget&&r.budget.assessment)||""); ((r.budget&&r.budget.flags)||[]).forEach(f=>line(`- ${f}`));
+  line("\n## 6. Risks and do no harm"); (r.risks||[]).forEach(x=>line(`- **${x.risk}**: ${x.status}. ${x.note}`));
+  line("\n## 7. Country fit"); line(r.countryFit||"");
+  line("\n## 8. Gaps and red flags"); (r.redFlags||[]).forEach(f=>line(`- ${f}`));
+  line("\n## 9. Top 3 fixes before submission"); (r.fixes||[]).forEach((x,i)=>line(`${i+1}. **${x.fix}** ${x.why}`));
+  line("\n_This is a pre-submission review, not an official PRM decision. Confirm all requirements against the current NOFO._");
+  return L.join("\n");
+}
+async function downloadReport(){
+  const d = await downloadsPromise; if(!d || !lastReport) return;
+  const name = "RefugeeReady_review_" + (lastReport.title||"program").replace(/[^a-z0-9]+/gi,"_").slice(0,40) + ".md";
+  try{ await d.save({filename:name, data:toMarkdown(lastReport)}); }catch(e){}
+}
+
+$("f").addEventListener("submit", async ev=>{
+  ev.preventDefault();
+  const out=$("out"); out.hidden=false;
+  if($("text").value.trim().length<40){ out.textContent=""; out.appendChild(el("p","error","Add a fuller program description (location, population, sectors, objectives, indicators), or upload a concept note, and try again.")); return; }
+  const sample = await samplePromise;
+  if(!sample){ out.textContent=""; out.appendChild(el("p","error","To run a review, open this page on claude.ai while signed in to a Claude account. A free account works.")); return; }
+  const btn=$("go"); btn.disabled=true; btn.textContent="Reviewing…";
+  out.hidden=false; out.textContent=""; out.appendChild(el("p","status-line","Checking eligibility, scorecard criteria, indicators, Sphere standards, budget, and risks. This can take up to a minute."));
+  try{
+    const r = await sample.json(buildPrompt(), {cache:false});
+    lastReport=r; lastProgram=programBlock(); chatTurns=[];
+    render(r);
+    $("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+  }catch(err){
+    out.textContent="";
+    const msg = friendlyError(err,"review");
+    out.appendChild(el("p","error",msg));
+  }finally{ btn.disabled=false; btn.textContent="Review program"; }
+});
+</script>
+</body>
+</html>
