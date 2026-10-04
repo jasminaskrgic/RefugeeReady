@@ -95,7 +95,7 @@ export async function onRequestPost(context) {
     return json({ status: "error", code: "server_misconfigured" }, 500);
   }
 
-  const model = context.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = context.env.GEMINI_MODEL || "gemini-3.8-flash";
   const out = await callGemini(key, model, messages);
 
   if (!out.data) {
