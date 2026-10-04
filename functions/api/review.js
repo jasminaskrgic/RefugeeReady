@@ -98,10 +98,16 @@ export async function onRequestPost(context) {
   const model = context.env.GEMINI_MODEL || "gemini-3.8-flash";
   const out = await callGemini(key, model, messages);
 
-  if (!out.data) {
-    console.error("Gemini API error", out.status, out.detail);
-    let code = "service";
-    let status = 502;
+if (!out.data) {
+  console.error("Gemini API error", out.status, out.detail);
+
+  return json({
+    status: "error",
+    code: "gemini_api_error",
+    httpStatus: out.status,
+    detail: out.detail
+  }, 502);
+}
 
     if (out.status === 429) {
       code = "rate_limited";
