@@ -1,6 +1,6 @@
 // Minimal service worker: makes the app installable and lets the shell open offline.
 // Reviews themselves always need an internet connection.
-const CACHE = "rr-shell-v1";
+const CACHE = "rr-shell-v2";
 const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (e) => {

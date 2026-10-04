@@ -449,7 +449,7 @@ function friendlyText(c, kind){
   if(c==="not_granted") return "The AI review service is not available. Check the Netlify function setup, then try again.";
   if(c==="session_expired") return "The AI review service session expired. Reload the page and try again.";
   if(c==="sampling_disabled"||c==="capability_disabled"||c==="not_declared") return "The AI review service is not available for this deployment. Check the Netlify function setup and GEMINI_API_KEY.";
-  if(c==="server_misconfigured") return "The review service isn't set up correctly (API key or model problem). If you run this site, check the Netlify environment variables and function logs.";
+  if(c==="server_misconfigured") return "The review service isn't set up correctly (API key or model problem). If you run this site, check the Cloudflare environment variables and function logs.";
   if(c==="timeout") return "The "+what+" took too long. Try again, or shorten the program description.";
   if(c==="rate_limited") return "The review service is busy or has reached its usage limit. Wait a few minutes, then try again.";
   if(c==="prompt_too_large") return "The program description is too long. Shorten it or upload a shorter concept note, then try again.";
@@ -458,35 +458,27 @@ function friendlyText(c, kind){
   if(c==="empty_completion") return "The AI reviewer returned an empty response. Try again with a fuller description.";
   return "The "+what+" didn't finish because of a connection or service problem. Wait a moment, then try again.";
 }
-/* ---- Connection to Gemini via this site's own Netlify functions ----
-   The page starts a background job, then checks every few seconds until the result is ready.
-   This avoids serverless time limits, since a full review can take close to a minute. */
-const API_BASE = "/.netlify/functions";
-const sleep = ms => new Promise(r=>setTimeout(r,ms));
-function newJobId(){
-  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return "xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx".replace(/x/g,()=>Math.floor(Math.random()*16).toString(16));
-}
+/* ---- Connection to Gemini via a Cloudflare Pages Function ----
+   The browser sends the review to /api/review. The API key stays server-side in Cloudflare. */
 async function runJob(messages){
-  const id = newJobId();
   let res;
   try{
-    res = await fetch(API_BASE+"/review-background",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,messages})});
+    res = await fetch("/api/review",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({messages})
+    });
   }catch(e){ throw {code:"network"}; }
+
+  let j={};
+  try{ j = await res.json(); }catch(e){}
+
   if(res.status===413) throw {code:"prompt_too_large"};
-  if(res.status!==202 && !res.ok) throw {code:"network"};
-  const started = Date.now();
-  while(Date.now()-started < 6*60*1000){
-    await sleep(3000);
-    let r;
-    try{ r = await fetch(API_BASE+"/review-status?id="+encodeURIComponent(id),{cache:"no-store"}); }catch(e){ continue; }
-    if(!r.ok) continue;
-    const j = await r.json();
-    if(j.status==="done") return j.text;
-    if(j.status==="error") throw {code:j.code||"network"};
-  }
-  throw {code:"timeout"};
+  if(!res.ok) throw {code:j.code||"network"};
+  if(j.status==="done" && typeof j.text==="string") return j.text;
+  throw {code:j.code||"network"};
 }
+
 function parseJson(text){
   let t=(text||"").trim().replace(/^```(?:json)?\s*/i,"").replace(/```\s*$/,"").trim();
   try{ return JSON.parse(t); }catch(e){}
