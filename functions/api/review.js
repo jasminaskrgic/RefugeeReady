@@ -150,8 +150,7 @@ export async function onRequestPost(context) {
     );
   }
 
-  const model = context.env.GEMINI_MODEL || "gemini-2.5-flash";
-
+const model = context.env.GEMINI_MODEL || "gemini-3.8-flash";
   const out = await callGemini(key, model, messages);
 
   if (!out.data) {
