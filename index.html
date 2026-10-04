@@ -249,14 +249,14 @@ footer dd{margin:.1rem 0 0}
   <dl class="spec">
     <dt>Users</dt><dd>Program managers, proposal writers, and M&amp;E staff at local and international NGOs designing refugee-response programs in Ethiopia, Kenya, and South Sudan, especially smaller local organizations without dedicated grants teams.</dd>
     <dt>Problem</dt><dd>PRM requirements are spread across long general guidelines, region-specific NOFOs, and technical standards. Proposals are often weakened by avoidable gaps: missing required indicators, output-only objectives, too few refugees in the target population, or weak protection and coordination plans. Many local NGOs lack the capacity for a rigorous internal review before the deadline.</dd>
-    <dt>Ground truth</dt><dd>PRM General NGO Guidelines for Overseas Assistance (FY2024), PRM Africa NOFO requirements, the Sphere Handbook (2018) minimum standards, and UNHCR country context for Kenya, Ethiopia, and South Sudan.</dd>
+    <dt>Ground truth</dt><dd>PRM General NGO Guidelines for Overseas Assistance (FY2024), FY2025 PRM Ethiopia/Kenya/South Sudan concept-note NOFO requirements, the Sphere Handbook (2018) minimum standards, and UNHCR country context for Kenya, Ethiopia, and South Sudan.</dd>
     <dt>Input</dt><dd>A concept note or program description (upload or paste), plus country, organization type, sectors, and optional budget, duration, refugee share, and NOFO.</dd>
     <dt>Output</dt><dd>A transparent readiness score, verdict, and nine-part review (eligibility, scorecard, indicators, Sphere standards, budget, risks, country fit, red flags, top 3 fixes), with evidence quoted from the concept note and a source cited for every judgment. Users can ask follow-up questions, re-review after edits to track improvement, and download the report.</dd>
   </dl>
 
   <h3>How the score works</h3>
-  <p>The score is calculated by the tool from the reviewer's ratings, not guessed by the AI, so every point can be traced. Each scorecard criterion is weighted (below) and rated Strong (100%), Adequate (65%), Weak (25%), or Cannot assess (0%). Eligibility then acts as a gate: any failed eligibility requirement caps the score at 45, and each unclear requirement subtracts 3 points. Scores of 80 and above are "Ready to submit," 50–79 "Needs revision," and below 50 "Major revision needed."</p>
-  <div class="tablewrap"><table id="weights"><thead><tr><th>Criterion</th><th>Weight</th></tr></thead><tbody></tbody></table></div>
+  <p>The scorecard uses the five published FY2025 PRM concept-note evaluation criteria for Ethiopia, Kenya, and South Sudan: Quality of program idea (20 points), Appropriate identification of beneficiary population, including vulnerable populations (10), Program feasibility/ability to achieve objectives (10), Organization's experience and capacity (5), and Budget (5), for 50 points total. RefugeeReady converts its reviewer ratings into points transparently: Strong = 100%, Adequate = 65%, Weak = 25%, and Cannot assess = 0% of each criterion's maximum. Those rating-to-point conversions are RefugeeReady's internal method, not an official PRM conversion formula. Eligibility is checked separately because PRM screens eligibility before competitive review. Always verify the current NOFO because criteria can change.</p>
+  <div class="tablewrap"><table id="weights"><thead><tr><th>PRM concept-note criterion</th><th>Maximum points</th></tr></thead><tbody></tbody></table></div>
 
   <h3>Safeguards</h3>
   <ul>
@@ -282,7 +282,7 @@ footer dd{margin:.1rem 0 0}
     <summary>What this tool checks against</summary>
     <dl>
       <dt>PRM General NGO Guidelines (FY2024)</dt><dd>Eligibility, consortium rules, sector and outcome indicators, cash and voucher indicators, scorecard, marking.</dd>
-      <dt>PRM Africa NOFO</dt><dd>At least 50% refugees or populations of concern, coordination with UNHCR, NOFO-specific limits.</dd>
+      <dt>FY2025 PRM Ethiopia/Kenya/South Sudan concept-note NOFO</dt><dd>At least 50% refugees or populations of concern, coordination with UNHCR, NOFO-specific limits.</dd>
       <dt>Sphere Handbook (2018)</dt><dd>WASH, food, shelter, and health minimum standards; Core Humanitarian Standard.</dd>
       <dt>UNHCR country context</dt><dd>Refugee settings, policies, and coordination bodies in Kenya, Ethiopia, and South Sudan.</dd>
     </dl>
@@ -348,9 +348,15 @@ PRM GENERAL NGO GUIDELINES FOR OVERSEAS ASSISTANCE (FY2024 edition, summarized):
 - PRM-funded education in refugee reintegration settings should have an MoU with local or national Ministry of Education officials.
 - Award duration, funding floors/ceilings, page limits, and priorities are set by each NOFO.
 
-PRM AFRICA NOFO (past concept-note NOFO, summarized):
-- Programs should target a population of at least 50 percent refugees, IDPs, or other populations of concern (confirm threshold in current NOFO).
-- Applicants should coordinate with UNHCR and relevant sector working groups.
+PRM FY2025 ETHIOPIA, KENYA, AND SOUTH SUDAN CONCEPT-NOTE NOFO (summarized from the published funding announcement):
+- PRM will only consider concept notes that target at least 50 percent of participants as refugees and recent refugee returnees.
+- Published concept-note evaluation criteria total 50 points: Quality of program idea (20); Appropriate identification of beneficiary population, including vulnerable populations (10); Program feasibility/ability to achieve objectives (10); Organization's experience and capacity (5); Budget (5).
+- Priority factors include a working relationship with UNHCR; a proven track record in the proposed sector and location; coordination with international organizations, NGOs, and local authorities where possible; and emphasis on program outcomes or impact.
+- Ethiopia: 12- or 24-month programs; PRM cost per year generally $500,000 minimum to $2,000,000 maximum. Eligible sectors vary by region and include Health, Protection, Nutrition/Food Security, WASH, Economic Empowerment, and MHPSS in specified locations.
+- Kenya: 12-month programs; PRM cost per year generally $500,000 minimum to $2,000,000 maximum, with a $5,000,000 health-care ceiling. Eligible sectors: Protection, Health, Primary Education, and Economic Empowerment in Kakuma, Kalobeyei, and Dadaab.
+- South Sudan: 12- or 24-month programs; PRM cost per year generally $500,000 minimum to $3,000,000 maximum. Eligible sectors include Protection, Health, Nutrition/Food Security, Primary Education, and WASH in Maban County only.
+- Concept notes are limited to four narrative pages and are reviewed in a two-stage process; selected organizations are invited to submit full proposals.
+- Verify all requirements, sectors, locations, floors, ceilings, and dates against the current NOFO before submission.
 
 SPHERE HANDBOOK (2018), selected minimum standards and indicators:
 - Water: at least 15 litres per person per day for drinking and domestic hygiene; water point no more than 500 m from households; queuing time no more than 30 minutes; no detectable E. coli per 100 ml at point of delivery; free residual chlorine 0.2–0.5 mg/l at point of delivery where chlorinated.
@@ -369,7 +375,7 @@ COUNTRY CONTEXT (general, verify with current UNHCR data):
 - South Sudan: hosts refugees (largely from Sudan) while facing large internal displacement and returnee flows; insecurity, flooding, and access constraints; coordination with UNHCR, OCHA-led clusters, and government counterparts.
 `;
 
-const SCORECARD = ["Alignment with NOFO and PRM priorities","Needs assessment and program design","Objectives and indicators","Monitoring and evaluation plan","Budget and cost-effectiveness","Organizational capacity and past performance","Coordination with UNHCR and partners","Protection mainstreaming and accountability to affected populations","Sustainability and exit strategy"];
+const SCORECARD = ["Quality of program idea","Appropriate identification of beneficiary population, including vulnerable populations","Program feasibility / ability to achieve objectives","Organization's experience and capacity","Budget"];
 
 const EXAMPLES = {
  weak:{country:"Kenya",org:"Local / national NGO",sectors:["WASH"],budget:900000,months:12,pct:40,nofo:"",
@@ -379,7 +385,8 @@ const EXAMPLES = {
  strong:{country:"South Sudan",org:"International NGO",sectors:["Protection","GBV","MHPSS"],budget:850000,months:12,pct:90,nofo:"FY2026 PRM Africa Overseas Assistance NOFO",
   text:"Safe Futures Maban (sample). Applicant: Common Ground Relief, a U.S. 501(c)(3) non-profit operating in Upper Nile State since 2012, with prior PRM, UNHCR, and ECHO awards and no significant audit findings.\n\nLocation: Doro and Yusuf Batil refugee camps and adjacent host communities, Maban County, Upper Nile State, South Sudan. Target: 24,000 people (90% Sudanese refugees, 10% host community). Duration: 12 months. Requested PRM funding: $850,000.\n\nNeeds assessment: A June 2026 protection assessment (380 household surveys, 22 focus groups disaggregated by sex, age, and disability) found women and girls face GBV risk at water points and firewood collection routes, limited access to confidential case management, and high psychosocial distress among new arrivals.\n\nGoal: Refugees and host community members in Maban, especially women and girls, are safer from GBV and have access to survivor-centred services.\n\nObjective 1: Improve access to quality GBV case management. Outcome indicator: % of GBV survivors receiving case management who report satisfaction with services (target 80%). Outputs: survivors receiving case management (900); women and girls safe spaces operating (4).\nObjective 2: Reduce GBV risk in the community. Outcome indicator: % of women and girls reporting feeling safe moving around the camp (baseline 32%, target 60%). Outputs: safety audits (16); community members trained in GBV prevention (400).\nObjective 3: Improve psychosocial wellbeing. Outcome indicator: % of MHPSS participants with improved wellbeing scores (target 70%). Outputs: individuals receiving focused psychosocial support (1,500).\nAll indicators will use applicable PRM standardized Protection indicators and required indicators, disaggregated by sex, age, disability, and refugee/host status.\n\nProtection and accountability: survivor-centred approach; case data in a secure, access-restricted system with no identifiable data shared; PSEA code of conduct and training for all staff; community feedback hotline and help desks in Arabic and local languages; accessible safe spaces for persons with disabilities.\n\nCoordination: member of the Maban Protection Working Group and GBV Sub-Cluster; referral pathways agreed with UNHCR, health partners, and the Commission for Refugee Affairs. Risks: insecurity and flooding may restrict access; mitigation includes pre-positioned supplies, community-based volunteers, and remote case supervision.\n\nSustainability: training of refugee community volunteers and local women's groups to lead prevention activities after the grant. Budget: personnel $380,000; safe spaces and supplies $170,000; case management and MHPSS $150,000; trainings and audits $60,000; M&E $40,000; indirect $50,000. PRM funding will be acknowledged per marking requirements."}
 };
-const WEIGHTS = [15,15,15,10,10,10,10,10,5];
+const WEIGHTS = [20,10,10,5,5];
+const SCORE_TOTAL = 50;
 
 const $ = id => document.getElementById(id);
 const sectorsSelected = () => [...document.querySelectorAll("#sectors input:checked")].map(i=>i.value);
@@ -398,23 +405,37 @@ function showTab(which){
   $("tab-review").setAttribute("aria-selected",rev); $("tab-about").setAttribute("aria-selected",!rev);
 }
 $("tab-review").onclick=()=>showTab("review"); $("tab-about").onclick=()=>showTab("about");
-(function(){ const tb=document.querySelector("#weights tbody"); SCORECARD.forEach((c,i)=>{const tr=el("tr"); tr.appendChild(el("td",null,c)); tr.appendChild(el("td","num",WEIGHTS[i]+"%")); tb.appendChild(tr);}); })();
+(function(){ const tb=document.querySelector("#weights tbody"); SCORECARD.forEach((c,i)=>{const tr=el("tr"); tr.appendChild(el("td",null,c)); tr.appendChild(el("td","num",WEIGHTS[i]+"")); tb.appendChild(tr);}); })();
 
 const RATING_PCT={strong:1,adequate:.65,weak:.25};
 function computeScore(r){
   const rows=SCORECARD.map((c,i)=>{
-    const item=(r.scorecard||[])[i]||{}; const key=(item.rating||"").toLowerCase().split(" ")[0];
-    const pct=RATING_PCT[key]||0; return {criterion:c, rating:item.rating||"Cannot assess", weight:WEIGHTS[i], points:Math.round(pct*WEIGHTS[i]*10)/10};
+    const item=(r.scorecard||[])[i]||{};
+    const key=(item.rating||"").toLowerCase().split(" ")[0];
+    const pct=RATING_PCT[key]||0;
+    return {
+      criterion:c,
+      rating:item.rating||"Cannot assess",
+      weight:WEIGHTS[i],
+      points:Math.round(pct*WEIGHTS[i]*10)/10
+    };
   });
-  let raw=rows.reduce((a,x)=>a+x.points,0);
-  const el_=r.eligibility||[];
-  const fails=el_.filter(e=>/^fail/i.test(e.status||"")).length, unclear=el_.filter(e=>/^unclear/i.test(e.status||"")).length;
-  let score=raw - unclear*3; const notes=[];
-  if(unclear) notes.push(`−${unclear*3} for ${unclear} unclear eligibility item${unclear>1?"s":""}`);
-  if(fails){ if(score>45) notes.push(`capped at 45 because ${fails} eligibility requirement${fails>1?"s":""} failed`); score=Math.min(score,45); }
-  score=Math.max(0,Math.round(score));
-  const verdict= score>=80?"Ready to submit":score>=50?"Needs revision":"Major revision needed";
-  return {rows, raw:Math.round(raw), score, verdict, notes};
+
+  const raw=Math.round(rows.reduce((a,x)=>a+x.points,0)*10)/10;
+  const eligibility=r.eligibility||[];
+  const fails=eligibility.filter(e=>/^fail/i.test(e.status||"")).length;
+  const unclear=eligibility.filter(e=>/^unclear/i.test(e.status||"")).length;
+  const notes=[];
+
+  if(fails){
+    notes.push(`Eligibility gate: ${fails} requirement${fails>1?"s":""} failed. PRM would not advance an ineligible concept note to competitive scoring.`);
+  }
+  if(unclear){
+    notes.push(`${unclear} eligibility item${unclear>1?"s are":" is"} unclear and should be verified against the current NOFO.`);
+  }
+
+  const verdict = fails ? "Eligibility issue — would not advance" : "PRM-style concept-note review";
+  return {rows, raw, score:raw, verdict, notes, eligibilityFailed:fails>0};
 }
 function loadHistory(){ try{ return JSON.parse(localStorage.getItem("rr-history")||"[]"); }catch(e){ return []; } }
 function saveHistory(h){ try{ localStorage.setItem("rr-history", JSON.stringify(h.slice(-10))); }catch(e){} }
@@ -425,19 +446,19 @@ function friendlyError(err, kind){
 }
 function friendlyText(c, kind){
   const what = kind==="chat" ? "answer" : "review";
-  if(c==="not_granted") return "This tool needs your permission to ask Claude. Reload the page, click Allow when prompted, then try again.";
-  if(c==="session_expired") return "Your Claude sign-in expired. Sign in again at claude.ai, then reload this page.";
-  if(c==="sampling_disabled"||c==="capability_disabled"||c==="not_declared") return "Claude isn't available for this account here. Open the link in a browser while signed in to a personal Claude account (a free account works).";
+  if(c==="not_granted") return "The AI review service is not available. Check the Netlify function setup, then try again.";
+  if(c==="session_expired") return "The AI review service session expired. Reload the page and try again.";
+  if(c==="sampling_disabled"||c==="capability_disabled"||c==="not_declared") return "The AI review service is not available for this deployment. Check the Netlify function setup and GEMINI_API_KEY.";
   if(c==="server_misconfigured") return "The review service isn't set up correctly (API key or model problem). If you run this site, check the Netlify environment variables and function logs.";
   if(c==="timeout") return "The "+what+" took too long. Try again, or shorten the program description.";
   if(c==="rate_limited") return "The review service is busy or has reached its usage limit. Wait a few minutes, then try again.";
   if(c==="prompt_too_large") return "The program description is too long. Shorten it or upload a shorter concept note, then try again.";
-  if(c==="invalid_json") return "Claude's "+what+" came back incomplete. Try again; if it keeps happening, shorten the program description.";
-  if(c==="refused") return "Claude declined this request. Rephrase the description and try again.";
-  if(c==="empty_completion") return "Claude returned an empty "+what+". Try again with a fuller description.";
+  if(c==="invalid_json") return "The AI review came back incomplete. Try again; if it keeps happening, shorten the program description.";
+  if(c==="refused") return "The AI reviewer declined this request. Rephrase the description and try again.";
+  if(c==="empty_completion") return "The AI reviewer returned an empty response. Try again with a fuller description.";
   return "The "+what+" didn't finish because of a connection or service problem. Wait a moment, then try again.";
 }
-/* ---- Connection to Claude via this site's own Netlify functions ----
+/* ---- Connection to Gemini via this site's own Netlify functions ----
    The page starts a background job, then checks every few seconds until the result is ready.
    This avoids serverless time limits, since a full review can take close to a minute. */
 const API_BASE = "/.netlify/functions";
@@ -532,7 +553,12 @@ Return ONLY valid JSON (no markdown fences) in exactly this shape. Keep every te
 }
 Rules for sections:
 - eligibility: check at least non-profit applicant; share of refugees/populations of concern; sectors match NOFO; PRM standardized indicators per sector; outcome indicator per objective; duration and budget within NOFO limits; marking/acknowledgment.
-- scorecard: use these criteria in order: ${SCORECARD.join("; ")}.
+- scorecard: use these five published FY2025 PRM concept-note criteria in order: ${SCORECARD.join("; ")}.
+  * Quality of program idea: consider alignment with the NOFO, needs/problem analysis, program design, protection mainstreaming, accountability, and sustainability where relevant.
+  * Appropriate identification of beneficiary population: consider whether the population is clearly identified, includes refugees/returnees as required, addresses vulnerable/underserved groups, and reflects community needs.
+  * Program feasibility / ability to achieve objectives: consider objectives, outcome focus, indicators, monitoring, operational risks, coordination, implementation practicality, and relevant Sphere standards.
+  * Organization's experience and capacity: consider stated track record, experience in the sector/location, partnerships, coordination with UNHCR/others, and organizational capacity.
+  * Budget: consider whether the budget is within the applicable NOFO limits when known and whether its structure appears reasonable for the proposed activities.
 - indicators: list every indicator in the program (max 8); if none, one row "None stated".
 - sphere: only standards relevant to the program's sectors (max 6); empty array if none apply.
 - risks: cover protection/GBV risk, PSEA, disability inclusion, refugee–host tensions, data protection, and one context-specific operational risk.
@@ -555,8 +581,9 @@ function render(r){
 
   const v=el("div","verdict");
   const calc=computeScore(r); const sc=calc.score; r.score=sc; r.verdict=calc.verdict; r._calc=calc;
-  const ring=el("div","score "+(sc>=80?"good":sc>=50?"mid":"bad"));
-  ring.appendChild(el("span","big",String(sc))); ring.appendChild(el("span","of","/100"));
+  const pctScore = SCORE_TOTAL ? (sc / SCORE_TOTAL) * 100 : 0;
+  const ring=el("div","score "+(pctScore>=80?"good":pctScore>=50?"mid":"bad"));
+  ring.appendChild(el("span","big",String(sc))); ring.appendChild(el("span","of","/"+SCORE_TOTAL));
   const vt=el("div"); vt.appendChild(el("h2",null,r.verdict||"Review complete")); vt.appendChild(el("p",null,r.summary||""));
   const el_ = r.eligibility||[]; const counts={Pass:0,Fail:0,Unclear:0}; el_.forEach(e=>{ const k=(e.status||"").split(" ")[0]; if(counts[k]!=null) counts[k]++; });
   const tally=el("p","tally");
@@ -576,7 +603,7 @@ function render(r){
   const md=el("details","method"); md.appendChild(el("summary",null,"How this score was calculated"));
   const mi=el("div","inner");
   mi.appendChild(table(["Criterion","Rating","Points"], calc.rows.map(x=>{const tr=el("tr"); tr.appendChild(td(x.criterion)); tr.appendChild(tdChip(x.rating)); const c=el("td","num"); c.textContent=x.points+" / "+x.weight; const bar=el("div","bar"); const i=el("i"); i.style.width=(x.points/x.weight*100)+"%"; bar.appendChild(i); c.appendChild(bar); tr.appendChild(c); return tr;})));
-  mi.appendChild(el("p","fine",`Scorecard total: ${calc.raw}/100${calc.notes.length?"; "+calc.notes.join("; "):""}. Final score: ${sc}/100. Strong = 100%, Adequate = 65%, Weak = 25%, Cannot assess = 0% of each weight.`));
+  mi.appendChild(el("p","fine",`PRM-style concept-note score: ${calc.raw}/${SCORE_TOTAL}${calc.notes.length?"; "+calc.notes.join("; "):""}. Maximum points follow the published FY2025 PRM concept-note criteria. Strong = 100%, Adequate = 65%, Weak = 25%, Cannot assess = 0% of each criterion's maximum; those rating conversions are RefugeeReady's internal method, not an official PRM formula.`));
   md.appendChild(mi); wrap.appendChild(md);
 
   if(r.missingInfo && r.missingInfo.length){
@@ -672,7 +699,7 @@ QUESTION: ${q}`});
 function toMarkdown(r){
   const L=[]; const line=s=>L.push(s);
   line(`# RefugeeReady East Africa review: ${r.title||"Program"}`);
-  line(`Country: ${$("country").value}  \nSectors: ${r.sectors||""}  \nVerdict: ${r.verdict} (${r.score}/100)\n`);
+  line(`Country: ${$("country").value}  \nSectors: ${r.sectors||""}  \nVerdict: ${r.verdict} (${r.score}/${SCORE_TOTAL})\n`);
   if(r._calc){ line("### Score breakdown"); r._calc.rows.forEach(x=>line(`- ${x.criterion}: ${x.rating} (${x.points}/${x.weight})`)); if(r._calc.notes.length) line(`- Adjustments: ${r._calc.notes.join("; ")}`); line(""); }
   line(r.summary||""); line("");
   line("## 1. Eligibility check"); (r.eligibility||[]).forEach(e=>line(`- **${e.requirement}**: ${e.status}. ${e.note}${e.evidence?` Evidence: "${e.evidence}"`:""} (${e.source})`));
@@ -698,7 +725,7 @@ $("f").addEventListener("submit", async ev=>{
   const out=$("out"); out.hidden=false;
   if($("text").value.trim().length<40){ out.textContent=""; out.appendChild(el("p","error","Add a fuller program description (location, population, sectors, objectives, indicators), or upload a concept note, and try again.")); return; }
   const sample = await samplePromise;
-  if(!sample){ out.textContent=""; out.appendChild(el("p","error","To run a review, open this page on claude.ai while signed in to a Claude account. A free account works.")); return; }
+  if(!sample){ out.textContent=""; out.appendChild(el("p","error","The AI review service is not available. Check that the Netlify functions are deployed and GEMINI_API_KEY is set.")); return; }
   const btn=$("go"); btn.disabled=true; btn.textContent="Reviewing…";
   out.hidden=false; out.textContent=""; out.appendChild(el("p","status-line","Checking eligibility, scorecard criteria, indicators, Sphere standards, budget, and risks. This can take up to a minute."));
   try{
