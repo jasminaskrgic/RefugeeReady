@@ -5,14 +5,31 @@ const RETRYABLE = [429, 500, 502, 503, 504];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function validMessages(messages) {
-  if (!Array.isArray(messages) || messages.length < 1 || messages.length > MAX_TURNS) return false;
+  if (!Array.isArray(messages) || messages.length < 1 || messages.length > MAX_TURNS) {
+    return false;
+  }
+
   let chars = 0;
+
   for (let i = 0; i < messages.length; i++) {
     const t = messages[i];
-    if (!t || (t.role !== "user" && t.role !== "assistant") || typeof t.content !== "string" || !t.content) return false;
-    if (t.role !== (i % 2 === 0 ? "user" : "assistant")) return false;
+
+    if (
+      !t ||
+      (t.role !== "user" && t.role !== "assistant") ||
+      typeof t.content !== "string" ||
+      !t.content
+    ) {
+      return false;
+    }
+
+    if (t.role !== (i % 2 === 0 ? "user" : "assistant")) {
+      return false;
+    }
+
     chars += t.content.length;
   }
+
   return messages[messages.length - 1].role === "user" && chars <= MAX_CHARS;
 }
 
@@ -38,6 +55,7 @@ async function callGemini(key, model, messages) {
 
   for (let attempt = 0; attempt < 3; attempt++) {
     let res;
+
     try {
       res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
@@ -61,75 +79,93 @@ async function callGemini(key, model, messages) {
         await sleep(1000 * (attempt + 1));
         continue;
       }
-      return { status: 0, detail: String(e) };
+
+      return {
+        status: 0,
+        detail: String(e),
+      };
     }
 
-    if (res.ok) return { data: await res.json() };
+    if (res.ok) {
+      return {
+        data: await res.json(),
+      };
+    }
 
     const detail = await res.text().catch(() => "");
+
     if (RETRYABLE.includes(res.status) && attempt < 2) {
       await sleep(1000 * (attempt + 1));
       continue;
     }
-    return { status: res.status, detail };
+
+    return {
+      status: res.status,
+      detail,
+    };
   }
 
-  return { status: 0, detail: "retries exhausted" };
+  return {
+    status: 0,
+    detail: "retries exhausted",
+  };
 }
 
 export async function onRequestPost(context) {
   let body;
+
   try {
     body = await context.request.json();
   } catch {
-    return json({ status: "error", code: "bad_request" }, 400);
+    return json(
+      {
+        status: "error",
+        code: "bad_request",
+      },
+      400
+    );
   }
 
   const messages = body?.messages;
+
   if (!validMessages(messages)) {
-    return json({ status: "error", code: "prompt_too_large" }, 413);
+    return json(
+      {
+        status: "error",
+        code: "prompt_too_large",
+      },
+      413
+    );
   }
 
   const key = context.env.GEMINI_API_KEY;
+
   if (!key) {
-    return json({ status: "error", code: "server_misconfigured" }, 500);
+    return json(
+      {
+        status: "error",
+        code: "server_misconfigured",
+      },
+      500
+    );
   }
 
-  const model = context.env.GEMINI_MODEL || "gemini-3.8-flash";
+  const model = context.env.GEMINI_MODEL || "gemini-2.5-flash";
+
   const out = await callGemini(key, model, messages);
 
-if (!out.data) {
-  console.error("Gemini API error", out.status, out.detail);
+  if (!out.data) {
+    console.error("Gemini API error", out.status, out.detail);
 
-  return json({
-    status: "error",
-    code: "gemini_api_error",
-    httpStatus: out.status,
-    detail: out.detail
-  }, 502);
-}
-
-    if (out.status === 429) {
-      code = "rate_limited";
-      status = 429;
-    } else if (out.status === 401 || out.status === 403 || out.status === 404) {
-      code = "server_misconfigured";
-      status = 500;
-    } else if (
-      out.status === 400 &&
-      /too long|too large|maximum|context|token/i.test(out.detail || "")
-    ) {
-      code = "prompt_too_large";
-      status = 413;
-    } else if (
-      out.status === 400 &&
-      /model|api key|key/i.test(out.detail || "")
-    ) {
-      code = "server_misconfigured";
-      status = 500;
-    }
-
-    return json({ status: "error", code }, status);
+    return json(
+      {
+        status: "error",
+        code: "gemini_api_error",
+        httpStatus: out.status,
+        detail: out.detail,
+      },
+      502
+    );
   }
 
   const d = out.data;
@@ -140,7 +176,13 @@ if (!out.data) {
     candidate?.finishReason === "SAFETY" ||
     candidate?.finishReason === "PROHIBITED_CONTENT"
   ) {
-    return json({ status: "error", code: "refused" }, 400);
+    return json(
+      {
+        status: "error",
+        code: "refused",
+      },
+      400
+    );
   }
 
   const text = (candidate?.content?.parts || [])
@@ -149,7 +191,13 @@ if (!out.data) {
     .trim();
 
   if (!text) {
-    return json({ status: "error", code: "empty_completion" }, 502);
+    return json(
+      {
+        status: "error",
+        code: "empty_completion",
+      },
+      502
+    );
   }
 
   return json({
