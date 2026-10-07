@@ -158,7 +158,9 @@ app.post("/api/review", async (req, res) => {
     .map((p) => (typeof p.text === "string" ? p.text : ""))
     .join("")
     .trim();
-
+console.log("RAW GEMINI RESPONSE:");
+console.log(text);
+console.log("FINISH REASON:", candidate?.finishReason);
   if (!text) {
     return res.status(502).json({
       status: "error",
